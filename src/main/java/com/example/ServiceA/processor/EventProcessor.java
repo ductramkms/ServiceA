@@ -7,10 +7,12 @@ import org.apache.camel.Processor;
 import java.util.UUID;
 
 public class EventProcessor implements Processor {
-    @Override
-    public void process(Exchange exchange) throws Exception {
-        EventRequestBody event = exchange.getIn().getBody(EventRequestBody.class);
-        EventResponseBody responseEvent = new EventResponseBody(UUID.randomUUID().toString(), event.getMessage().toUpperCase(), exchange.getExchangeId());
-        exchange.getIn().setBody(responseEvent);
-    }
+
+  @Override
+  public void process(Exchange exchange) throws Exception {
+    EventRequestBody event = exchange.getIn().getBody(EventRequestBody.class);
+    EventResponseBody responseEvent = new EventResponseBody(UUID.randomUUID().toString(),
+        event.getMessage().toUpperCase(), exchange.getExchangeId());
+    exchange.getIn().setBody(responseEvent);
+  }
 }

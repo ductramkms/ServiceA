@@ -7,5 +7,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EventRequestBody {
-    private String message;
+
+  private String message;
 }

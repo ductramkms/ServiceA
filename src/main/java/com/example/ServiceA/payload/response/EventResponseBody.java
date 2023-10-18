@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EventResponseBody {
-    private  String id;
-    private  String message;
-    private  String exchangeId;
+
+  private String id;
+  private String message;
+  private String exchangeId;
 }

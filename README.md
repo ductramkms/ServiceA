@@ -1,10 +1,8 @@
-package com.example.ServiceA.camel;
+### NOTE:
 
-import com.example.ServiceA.processor.EventProcessor;
-import org.apache.camel.builder.RouteBuilder;
-import org.springframework.stereotype.Component;
+- The common bugs usually occurs:
 
-@Component
+```java
 public class CamelRouterBuilder extends RouteBuilder {
 
   @Override
@@ -28,3 +26,12 @@ public class CamelRouterBuilder extends RouteBuilder {
         .process(new EventProcessor());
   }
 }
+```
+
+At the "host" config, when deploy to docker it can't use 'localhost', it use the host name when inspect the container on docker.
+
+```bash
+docker inspect service_b_container
+```
+
+And then you find the hostname, in this case I got the value "230be57f37d3".

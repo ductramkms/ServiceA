@@ -8,12 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class EventController {
-
-  @GetMapping(value = "/get-name")
-  public String getName() {
-    return "MY NAME IS DUC";
-  }
-
   @Produce("direct:event")
   private final ProducerTemplate producerTemplate;
 

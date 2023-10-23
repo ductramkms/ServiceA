@@ -16,6 +16,8 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
      */
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<String> handleAllException(Exception exception) {
+        System.out.println(exception.getMessage().toString());
+        exception.printStackTrace();
         return ResponseEntity.internalServerError().body("Internal Error OK");
     }
 }

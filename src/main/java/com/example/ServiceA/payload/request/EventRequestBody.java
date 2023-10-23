@@ -2,9 +2,7 @@ package com.example.ServiceA.payload.request;
 
 import lombok.*;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
 public class EventRequestBody {
 

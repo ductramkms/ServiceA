@@ -1,16 +1,24 @@
 package com.example.ServiceA.camel;
 
+import com.example.ServiceA.constant.Constant;
+import com.example.ServiceA.payload.response.CamelResponseBody;
 import com.example.ServiceA.processor.EventProcessor;
 
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.http.base.HttpOperationFailedException;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CamelRouterBuilder extends RouteBuilder {
+
+  static {
+    List<Integer> list = new ArrayList<>();
+    list.stream().forEach(System.out::println);
+  }
 
   @Override
   public void configure() throws Exception {
@@ -18,39 +26,39 @@ public class CamelRouterBuilder extends RouteBuilder {
         .endpointProperty("bridgeEndpoint", "true")
         .endpointProperty("throwExceptionOnFailure", "false"); // Add this line
 
-    onException(Exception.class).to("log:ERRROROOROOOOROORORO");
-
+    // Handle for employee
     from("direct:employee").choice()
-        .when(body().isEqualTo("get-all"))
+        // GET ALL EMPLOYEES
+        .when(header(Constant.REQ_TYPE).isEqualTo(Constant.GET_EMPLOYEES))
         .to("rest:get:employee")
         .log("log:${body}")
         .process(exchange -> {
           String result = exchange.getIn().getBody(String.class);
-          exchange.getMessage().setBody(result);
+          CamelResponseBody body = CamelResponseBody.fromJson(result);
+          exchange.getMessage().setBody(body);
         })
-        .when(body().isEqualTo("get-by-id"))
-        .log("@D_LOG Header: ${headers.id}")
-        .toD("rest:get:employee/${headers.id}")
+        // GET ALL EMPLOYEE BY ID
+        .when(header(Constant.REQ_TYPE).isEqualTo(Constant.GET_EMPLOYEE_BY_ID))
+        .toD("rest:get:employee/${body}")
         .log("@D_LOG: ${body}")
-        .log("@D_LOG ID: ${headers.id}")
         .process(exchange -> {
-          // Map<String, Object> header = exchange.getIn().getHeaders();
-
-          // for (Entry<String, Object> entry : header.entrySet()) {
-          //   System.out.println("@D_LOG: " + entry.getKey() + " ~ " + entry.getValue());
-          // }
-
           String result = exchange.getIn().getBody(String.class);
-          System.out.println("@D_LOG: " + result);
-          exchange.getMessage().setBody(result);
-
-          Map<String, Object> header = exchange.getMessage().getHeaders();
-
-          for (Entry<String, Object> entry : header.entrySet()) {
-            System.out.println("@D_LOG: " + entry.getKey() + " ~ " + entry.getValue());
-          }
+          CamelResponseBody body = CamelResponseBody.fromJson(result);
+          exchange.getMessage().setBody(body);
+        })
+        // CREATE EMPLOYEE
+        .when(header(Constant.REQ_TYPE).isEqualTo(Constant.CREATE_EMPLOYEE))
+        .setBody().simple("${body}")
+        .setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_VALUE))
+        .to("rest:post:employee")
+        .log("@D_LOG: ${body}")
+        .process(exchange -> {
+          String result = exchange.getIn().getBody(String.class);
+          CamelResponseBody body = CamelResponseBody.fromJson(result);
+          exchange.getMessage().setBody(body);
         });
 
+    // Handle for event router
     from("direct:event")
         .log("Sending message with body and header")
         .to("log:output")

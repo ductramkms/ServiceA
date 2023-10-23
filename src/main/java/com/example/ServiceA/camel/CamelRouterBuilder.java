@@ -22,7 +22,7 @@ public class CamelRouterBuilder extends RouteBuilder {
 
   @Override
   public void configure() throws Exception {
-    restConfiguration().host("localhost").port(8081).component("http")
+    restConfiguration().host("service_b_container").port(8081).component("http")
         .endpointProperty("bridgeEndpoint", "true")
         .endpointProperty("throwExceptionOnFailure", "false"); // Add this line
 

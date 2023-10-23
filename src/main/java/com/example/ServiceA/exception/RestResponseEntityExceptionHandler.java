@@ -3,10 +3,9 @@ package com.example.ServiceA.exception;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
-public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
+public class RestResponseEntityExceptionHandler {
 
     /**
      * Handle the others exception, that usually occurs in the internal system.
@@ -16,7 +15,6 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
      */
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<String> handleAllException(Exception exception) {
-        System.out.println(exception.getMessage().toString());
         exception.printStackTrace();
         return ResponseEntity.internalServerError().body("Internal Error OK");
     }

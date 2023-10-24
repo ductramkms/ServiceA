@@ -4,9 +4,6 @@ import com.example.ServiceA.constant.Constant;
 import com.example.ServiceA.payload.response.CamelResponseBody;
 import com.example.ServiceA.processor.EventProcessor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.http.MediaType;
@@ -15,14 +12,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class CamelRouterBuilder extends RouteBuilder {
 
-  static {
-    List<Integer> list = new ArrayList<>();
-    list.stream().forEach(System.out::println);
-  }
-
   @Override
   public void configure() throws Exception {
-    restConfiguration().host("service_b_container").port(8081).component("http")
+    restConfiguration().host("localhost").port(8081).component("http")
         .endpointProperty("bridgeEndpoint", "true")
         .endpointProperty("throwExceptionOnFailure", "false"); // Add this line
 

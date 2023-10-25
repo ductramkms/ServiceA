@@ -6,15 +6,19 @@ import com.example.ServiceA.processor.EventProcessor;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CamelRouterBuilder extends RouteBuilder {
-
+  @Value("${app.service_b.host}")
+  private String host;
+  @Value("${app.service_b.port}")
+  private String port;
   @Override
   public void configure() throws Exception {
-    restConfiguration().host("localhost").port(8081).component("http")
+    restConfiguration().host(host).port(port).component("http")
         .endpointProperty("bridgeEndpoint", "true")
         .endpointProperty("throwExceptionOnFailure", "false"); // Add this line
 

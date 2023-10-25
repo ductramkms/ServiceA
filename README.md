@@ -28,7 +28,8 @@ public class CamelRouterBuilder extends RouteBuilder {
 }
 ```
 
-At the "host" config, when deploy to docker it can't use 'localhost', it use the host name when inspect the container on docker.
+At the "host" config, when deploy to docker it can't use 'localhost', it use the host name when
+inspect the container on docker.
 
 ```bash
 docker inspect service_b_container

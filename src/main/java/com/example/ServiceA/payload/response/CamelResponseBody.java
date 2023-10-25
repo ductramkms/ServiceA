@@ -1,7 +1,6 @@
 package com.example.ServiceA.payload.response;
 
 import com.google.gson.Gson;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,13 +10,13 @@ import lombok.Data;
 @AllArgsConstructor
 public class CamelResponseBody {
 
-    private String status;
-    private String message;
-    private Object data;
+  private String status;
+  private String message;
+  private Object data;
 
-    public static CamelResponseBody fromJson(String src) {
-        Gson gson = new Gson();
-        CamelResponseBody responseBody = gson.fromJson(src, CamelResponseBody.class);
-        return responseBody;
-    }
+  public static CamelResponseBody fromJson(String src) {
+    Gson gson = new Gson();
+    CamelResponseBody responseBody = gson.fromJson(src, CamelResponseBody.class);
+    return responseBody;
+  }
 }

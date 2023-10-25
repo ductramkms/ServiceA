@@ -3,7 +3,6 @@ package com.example.ServiceA.camel;
 import com.example.ServiceA.constant.Constant;
 import com.example.ServiceA.payload.response.CamelResponseBody;
 import com.example.ServiceA.processor.EventProcessor;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,10 +11,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CamelRouterBuilder extends RouteBuilder {
+
   @Value("${app.service_b.host}")
   private String host;
   @Value("${app.service_b.port}")
   private String port;
+
   @Override
   public void configure() throws Exception {
     restConfiguration().host(host).port(port).component("http")

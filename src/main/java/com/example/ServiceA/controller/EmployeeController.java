@@ -1,5 +1,7 @@
 package com.example.ServiceA.controller;
 
+import com.example.ServiceA.constant.Constant;
+import com.example.ServiceA.payload.response.CamelResponseBody;
 import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
 import org.apache.logging.log4j.LogManager;
@@ -14,58 +16,55 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.ServiceA.constant.Constant;
-import com.example.ServiceA.payload.response.CamelResponseBody;
-
 @RestController
 @RequestMapping(path = "employee", produces = MediaType.APPLICATION_JSON_VALUE)
 public class EmployeeController {
 
-    private Logger logger = LogManager.getLogger(EmployeeController.class);
-    @Produce
-    private final ProducerTemplate producerTemplate;
+  @Produce
+  private final ProducerTemplate producerTemplate;
+  private Logger logger = LogManager.getLogger(EmployeeController.class);
 
-    public EmployeeController(ProducerTemplate template) {
-        this.producerTemplate = template;
-    }
+  public EmployeeController(ProducerTemplate template) {
+    this.producerTemplate = template;
+  }
 
-    /**
-     * This function return the common type of result of each APIs.
-     * 
-     * @param body common type of content body
-     * @return response entity
-     */
-    private ResponseEntity<CamelResponseBody> result(CamelResponseBody body) {
-        return ResponseEntity.status(HttpStatus.valueOf(body.getStatus())).body(body);
-    }
+  /**
+   * This function return the common type of result of each APIs.
+   *
+   * @param body common type of content body
+   * @return response entity
+   */
+  private ResponseEntity<CamelResponseBody> result(CamelResponseBody body) {
+    return ResponseEntity.status(HttpStatus.valueOf(body.getStatus())).body(body);
+  }
 
-    @GetMapping
-    public ResponseEntity<CamelResponseBody> all() {
-        logger.info("Get all employees");
-        CamelResponseBody body = (CamelResponseBody) producerTemplate.requestBodyAndHeader(
-                "direct:employee", null,
-                Constant.REQ_TYPE, Constant.GET_EMPLOYEES);
+  @GetMapping
+  public ResponseEntity<CamelResponseBody> all() {
+    logger.info("Get all employees");
+    CamelResponseBody body = (CamelResponseBody) producerTemplate.requestBodyAndHeader(
+        "direct:employee", null,
+        Constant.REQ_TYPE, Constant.GET_EMPLOYEES);
 
-        return result(body);
-    }
+    return result(body);
+  }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<CamelResponseBody> getById(@PathVariable Integer id) {
-        logger.info("Get employee by id");
-        CamelResponseBody body = (CamelResponseBody) producerTemplate.requestBodyAndHeader(
-                "direct:employee",
-                id, Constant.REQ_TYPE, Constant.GET_EMPLOYEE_BY_ID);
+  @GetMapping("/{id}")
+  public ResponseEntity<CamelResponseBody> getById(@PathVariable Integer id) {
+    logger.info("Get employee by id");
+    CamelResponseBody body = (CamelResponseBody) producerTemplate.requestBodyAndHeader(
+        "direct:employee",
+        id, Constant.REQ_TYPE, Constant.GET_EMPLOYEE_BY_ID);
 
-        return result(body);
-    }
+    return result(body);
+  }
 
-    @PostMapping
-    public ResponseEntity<CamelResponseBody> create(@RequestBody String value) {
-        logger.info("Create new employee");
-        CamelResponseBody body = (CamelResponseBody) producerTemplate.requestBodyAndHeader(
-                "direct:employee",
-                value, Constant.REQ_TYPE, Constant.CREATE_EMPLOYEE);
+  @PostMapping
+  public ResponseEntity<CamelResponseBody> create(@RequestBody String value) {
+    logger.info("Create new employee");
+    CamelResponseBody body = (CamelResponseBody) producerTemplate.requestBodyAndHeader(
+        "direct:employee",
+        value, Constant.REQ_TYPE, Constant.CREATE_EMPLOYEE);
 
-        return result(body);
-    }
+    return result(body);
+  }
 }

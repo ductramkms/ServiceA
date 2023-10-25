@@ -2,9 +2,9 @@ package com.example.ServiceA.processor;
 
 import com.example.ServiceA.payload.request.EventRequestBody;
 import com.example.ServiceA.payload.response.EventResponseBody;
+import java.util.UUID;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import java.util.UUID;
 
 public class EventProcessor implements Processor {
 

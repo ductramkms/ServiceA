@@ -18,6 +18,7 @@
         <groupId>org.springframework.boot</groupId>
       </plugin>
     </plugins>
+    <finalName>service_a</finalName>
   </build>
   <dependencies>
     <dependency>
@@ -110,7 +111,7 @@
   <parent>
     <artifactId>spring-boot-starter-parent</artifactId>
     <groupId>org.springframework.boot</groupId>
-    <relativePath/>
+    <relativePath />
     <version>2.7.16</version> <!-- lookup parent from repository -->
   </parent>
 

@@ -2,6 +2,8 @@ package com.example.ServiceA.controller;
 
 import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,7 @@ import com.example.ServiceA.payload.response.CamelResponseBody;
 @RequestMapping(path = "employee", produces = MediaType.APPLICATION_JSON_VALUE)
 public class EmployeeController {
 
+    private Logger logger = LogManager.getLogger(EmployeeController.class);
     @Produce
     private final ProducerTemplate producerTemplate;
 
@@ -38,6 +41,7 @@ public class EmployeeController {
 
     @GetMapping
     public ResponseEntity<CamelResponseBody> all() {
+        logger.info("Get all employees");
         CamelResponseBody body = (CamelResponseBody) producerTemplate.requestBodyAndHeader(
                 "direct:employee", null,
                 Constant.REQ_TYPE, Constant.GET_EMPLOYEES);
@@ -47,7 +51,7 @@ public class EmployeeController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CamelResponseBody> getById(@PathVariable Integer id) {
-
+        logger.info("Get employee by id");
         CamelResponseBody body = (CamelResponseBody) producerTemplate.requestBodyAndHeader(
                 "direct:employee",
                 id, Constant.REQ_TYPE, Constant.GET_EMPLOYEE_BY_ID);
@@ -57,6 +61,7 @@ public class EmployeeController {
 
     @PostMapping
     public ResponseEntity<CamelResponseBody> create(@RequestBody String value) {
+        logger.info("Create new employee");
         CamelResponseBody body = (CamelResponseBody) producerTemplate.requestBodyAndHeader(
                 "direct:employee",
                 value, Constant.REQ_TYPE, Constant.CREATE_EMPLOYEE);

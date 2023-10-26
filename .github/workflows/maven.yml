@@ -17,17 +17,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    if: contains(github.event.head_commit.message, '[ci build]')
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: Check commit message prefix
-        run: |
-          if [[ "${{ github.event.head_commit.message }}" != *"[ci build]"* ]]; then
-            echo "Commit message does not contain the required prefix. Skipping workflow. ${{ github.event.head_commit.message }}"
-            exit 0
-          fi
-
       - uses: actions/checkout@v3
       - name: Set up JDK 11
         uses: actions/setup-java@v3

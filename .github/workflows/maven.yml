@@ -11,10 +11,10 @@ name: Build & Push image of ServiceA to DockerHub
 on:
   push:
     branches: ["main"]
+    conditions: contains(github.event.head_commit.message, "[ci build]")
   pull_request:
     branches: ["main"]
-    paths-ignore: ["**.md"]
-    conditions: ['contains(github.event.head_commit.message, "[ci build]")']
+    conditions: contains(github.event.head_commit.message, "[ci build]")
 
 jobs:
   build:

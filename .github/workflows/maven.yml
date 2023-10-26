@@ -24,7 +24,7 @@ jobs:
       - name: Check commit message prefix
         run: |
           if [[ "${{ github.event.head_commit.message }}" != *"[ci build]"* ]]; then
-            echo "Commit message does not contain the required prefix. Skipping workflow."
+            echo "Commit message does not contain the required prefix. Skipping workflow. ${{ github.event.head_commit.message }}"
             exit 0
           fi
 

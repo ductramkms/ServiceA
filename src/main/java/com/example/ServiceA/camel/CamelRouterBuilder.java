@@ -27,6 +27,7 @@ public class CamelRouterBuilder extends RouteBuilder {
     from("direct:employee").choice()
         // GET ALL EMPLOYEES
         .when(header(Constant.REQ_TYPE).isEqualTo(Constant.GET_EMPLOYEES))
+        .setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_VALUE))
         .to("rest:get:employee")
         .log("log:${body}")
         .process(exchange -> {
@@ -36,8 +37,11 @@ public class CamelRouterBuilder extends RouteBuilder {
         })
         // GET ALL EMPLOYEE BY ID
         .when(header(Constant.REQ_TYPE).isEqualTo(Constant.GET_EMPLOYEE_BY_ID))
+        .setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_VALUE))
+        .log("@D_LOG REQUEST: ${headers}")
         .toD("rest:get:employee/${body}")
-        .log("@D_LOG: ${body}")
+        .log("@D_LOG: RESPONSE: ${headers}")
+        .log("@D_LOG OF GET BY ID: ${body}")
         .process(exchange -> {
           String result = exchange.getIn().getBody(String.class);
           CamelResponseBody body = CamelResponseBody.fromJson(result);

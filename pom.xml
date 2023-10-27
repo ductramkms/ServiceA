@@ -76,7 +76,21 @@
       <groupId>com.google.code.gson</groupId>
       <version>2.10.1</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.mock-server</groupId>
+      <artifactId>mockserver-netty</artifactId>
+      <version>5.11.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mock-server</groupId>
+      <artifactId>mockserver-client-java</artifactId>
+      <version>5.11.2</version>
+    </dependency>
+
   </dependencies>
+
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -103,6 +117,7 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+
   <description>Demo project for Spring Boot</description>
   <groupId>com.example</groupId>
   <modelVersion>4.0.0</modelVersion>

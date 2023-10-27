@@ -50,7 +50,7 @@ public class EmployeeController {
 
   @GetMapping("/{id}")
   public ResponseEntity<CamelResponseBody> getById(@PathVariable Integer id) {
-    logger.info("Get employee by id");
+    logger.info("Get employee by id = " + id);
     CamelResponseBody body = (CamelResponseBody) producerTemplate.requestBodyAndHeader(
         "direct:employee",
         id, Constant.REQ_TYPE, Constant.GET_EMPLOYEE_BY_ID);
@@ -61,6 +61,7 @@ public class EmployeeController {
   @PostMapping
   public ResponseEntity<CamelResponseBody> create(@RequestBody String value) {
     logger.info("Create new employee");
+
     CamelResponseBody body = (CamelResponseBody) producerTemplate.requestBodyAndHeader(
         "direct:employee",
         value, Constant.REQ_TYPE, Constant.CREATE_EMPLOYEE);

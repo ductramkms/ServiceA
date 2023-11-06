@@ -1,0 +1,11 @@
+server:
+  port: 8080
+
+app:
+  service_b:
+    host: ${SERVICE_B_HOST:localhost}
+    port: ${SERVICE_B_PORT:8081}
+
+spring:
+  kafka:
+    bootstrap-servers: localhost:29092

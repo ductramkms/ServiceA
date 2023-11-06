@@ -14,6 +14,7 @@
               <groupId>org.projectlombok</groupId>
             </exclude>
           </excludes>
+          <mainClass>com.example.ServiceA.ServiceAApplication</mainClass>
         </configuration>
         <groupId>org.springframework.boot</groupId>
       </plugin>
@@ -21,6 +22,7 @@
     <finalName>service_a</finalName>
   </build>
   <dependencies>
+    <!-- Spring boot starter -->
     <dependency>
       <artifactId>spring-boot-starter-web</artifactId>
       <exclusions>
@@ -31,34 +33,41 @@
       </exclusions>
       <groupId>org.springframework.boot</groupId>
     </dependency>
-
+    <!-- Log4J2 -->
     <dependency>
       <artifactId>spring-boot-starter-log4j2</artifactId>
       <groupId>org.springframework.boot</groupId>
     </dependency>
-
+    <!-- Camel -->
     <dependency>
       <artifactId>camel-spring-boot-starter</artifactId>
       <groupId>org.apache.camel.springboot</groupId>
       <version>3.20.6</version>
     </dependency>
-
     <dependency>
       <artifactId>camel-http-starter</artifactId>
       <groupId>org.apache.camel.springboot</groupId>
     </dependency>
-
+    <!-- Jackson  -->
     <dependency>
       <artifactId>camel-jackson-starter</artifactId>
       <groupId>org.apache.camel.springboot</groupId>
     </dependency>
-
+    <!-- Lombok -->
     <dependency>
       <artifactId>lombok</artifactId>
       <groupId>org.projectlombok</groupId>
       <optional>true</optional>
     </dependency>
 
+    <!-- GSon -->
+    <dependency>
+      <artifactId>gson</artifactId>
+      <groupId>com.google.code.gson</groupId>
+      <version>2.10.1</version>
+    </dependency>
+
+    <!-- Test -->
     <dependency>
       <artifactId>spring-boot-starter-test</artifactId>
       <exclusions>
@@ -71,12 +80,7 @@
       <scope>test</scope>
     </dependency>
 
-    <dependency>
-      <artifactId>gson</artifactId>
-      <groupId>com.google.code.gson</groupId>
-      <version>2.10.1</version>
-    </dependency>
-
+    <!-- Mock Server -->
     <dependency>
       <groupId>org.mock-server</groupId>
       <artifactId>mockserver-netty</artifactId>
@@ -89,6 +93,12 @@
       <version>5.11.2</version>
     </dependency>
 
+    <!-- Kafka -->
+    <dependency>
+      <groupId>org.springframework.kafka</groupId>
+      <artifactId>spring-kafka</artifactId>
+      <version>2.8.11</version>
+    </dependency>
   </dependencies>
 
   <dependencyManagement>

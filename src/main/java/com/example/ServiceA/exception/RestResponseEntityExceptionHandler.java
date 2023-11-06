@@ -9,15 +9,16 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @Slf4j
 public class RestResponseEntityExceptionHandler {
 
-  /**
-   * Handle the others exception, that usually occurs in the internal system.
-   *
-   * @param exception
-   * @return 500 status
-   */
-  @ExceptionHandler(Exception.class)
-  protected ResponseEntity<String> handleAllException(Exception exception) {
-    log.warn("AN ERROR HAS OCCURRED");
-    return ResponseEntity.internalServerError().body("Internal Error OK");
-  }
+    /**
+     * Handle the others exception, that usually occurs in the internal system.
+     *
+     * @param exception
+     * @return 500 status
+     */
+    @ExceptionHandler(Exception.class)
+    protected ResponseEntity<String> handleAllException(Exception exception) {
+        log.warn("AN ERROR HAS OCCURRED");
+        exception.printStackTrace();
+        return ResponseEntity.internalServerError().body("Internal Error OK");
+    }
 }

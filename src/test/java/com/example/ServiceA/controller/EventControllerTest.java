@@ -18,19 +18,21 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @AutoConfigureMockMvc
 class EventControllerTest {
 
-  @Autowired
-  MockMvc mockMvc;
+    @Autowired
+    MockMvc mockMvc;
 
-  @Test
-  void getEvent() throws Exception {
-    String body = "{\n"
-        + "    \"message\": \"Hello World!\"\n"
-        + "}";
+    @Test
+    void getEvent() throws Exception {
+        String body = "{\n"
+                + "    \"message\": \"Hello World!\"\n"
+                + "}";
 
-    mockMvc.perform(
-            MockMvcRequestBuilders.post("/event").contentType(MediaType.APPLICATION_JSON).content(body))
-        .andExpect(
-            MockMvcResultMatchers.status().isOk()).andExpect(
-            MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
-  }
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/event").contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(
+                        MockMvcResultMatchers.status().isOk()).andExpect(
+                                MockMvcResultMatchers.content().contentTypeCompatibleWith(
+                                        MediaType.APPLICATION_JSON));
+    }
 }

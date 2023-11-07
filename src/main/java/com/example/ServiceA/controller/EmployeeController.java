@@ -1,7 +1,11 @@
 package com.example.ServiceA.controller;
 
 import com.example.ServiceA.constant.Constant;
+import com.example.ServiceA.payload.request.KafkaRequestBody;
 import com.example.ServiceA.payload.response.CamelResponseBody;
+import com.example.ServiceA.util.ColorLog;
+import com.example.ServiceA.util.Helper;
+
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.camel.Produce;
@@ -11,8 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.support.SendResult;
-import org.springframework.util.concurrent.ListenableFuture;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,7 +48,7 @@ public class EmployeeController {
 
     @GetMapping
     public ResponseEntity<CamelResponseBody> all() {
-        log.info("Get all employees");
+        log.info(ColorLog.getLog("Get all employees"));
         CamelResponseBody body = (CamelResponseBody) producerTemplate.requestBodyAndHeader(
                 "direct:employees", null,
                 Constant.REQ_TYPE, Constant.GET_EMPLOYEES);
@@ -55,7 +58,7 @@ public class EmployeeController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CamelResponseBody> getById(@PathVariable Integer id) {
-        log.info("Get employee by id = " + id);
+        log.info(ColorLog.getLog("Get employee by id = " + id));
         CamelResponseBody body = (CamelResponseBody) producerTemplate.requestBodyAndHeader(
                 "direct:employees",
                 id, Constant.REQ_TYPE, Constant.GET_EMPLOYEE_BY_ID);
@@ -65,7 +68,7 @@ public class EmployeeController {
 
     @PostMapping
     public ResponseEntity<CamelResponseBody> create(@RequestBody String value) {
-        log.info("Create new employee");
+        log.info(ColorLog.getLog("Create new employee"));
 
         CamelResponseBody body = (CamelResponseBody) producerTemplate.requestBodyAndHeader(
                 "direct:employees",
@@ -79,39 +82,21 @@ public class EmployeeController {
 
     @PutMapping
     public ResponseEntity<CamelResponseBody> update(@RequestBody String value) {
-        log.info("Create new employee");
+        log.info(ColorLog.getLog("Update new employee"));
 
-        CamelResponseBody body = (CamelResponseBody) producerTemplate.requestBodyAndHeader(
-                "direct:employees",
-                value, Constant.REQ_TYPE, Constant.UPDATE_EMPLOYEE);
+        KafkaRequestBody message = new KafkaRequestBody(Constant.UPDATE_EMPLOYEE, value);
+        kafkaTemplate.send(Constant.TOPIC_1, Helper.jsonSerialize(message));
 
-        sendMessage("Hello server a");
-        return result(body);
+        return ResponseEntity.accepted().body(CamelResponseBody.builder().build());
     }
 
-    private void sendMessage(String message) {
-        ListenableFuture<SendResult<String, String>> future = kafkaTemplate
-                .send(Constant.TOPIC_1, message);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<CamelResponseBody> delete(@PathVariable Integer id) {
+        log.info(ColorLog.getLog("Delete employee " + id));
 
-        try {
-            SendResult<String, String> result = future.completable().get();
-            System.out.println(result);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        KafkaRequestBody message = new KafkaRequestBody(Constant.DELETE_EMPLOYEE, "" + id);
+        kafkaTemplate.send(Constant.TOPIC_1, Helper.jsonSerialize(message));
 
-        // future.addCallback(arg0 -> {
-        //     return null;
-        // });
-
-        // future.whenComplete((result, ex) -> {
-        //     if (ex == null) {
-        //         System.out.println("Sent message=[" + message +
-        //                 "] with offset=[" + result.getRecordMetadata().offset() + "]");
-        //     } else {
-        //         System.out.println("Unable to send message=[" +
-        //                 message + "] due to : " + ex.getMessage());
-        //     }
-        // });
+        return ResponseEntity.accepted().body(CamelResponseBody.builder().build());
     }
 }

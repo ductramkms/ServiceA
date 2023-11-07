@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.example.ServiceA.util.ColorLog;
+
 @ControllerAdvice
 @Slf4j
 public class RestResponseEntityExceptionHandler {
@@ -17,8 +19,8 @@ public class RestResponseEntityExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<String> handleAllException(Exception exception) {
-        log.warn("AN ERROR HAS OCCURRED");
-        exception.printStackTrace();
+        log.warn(ColorLog.getWarn("AN ERROR HAS OCCURRED"));
+        ColorLog.printStackTrace(exception);
         return ResponseEntity.internalServerError().body("Internal Error OK");
     }
 }

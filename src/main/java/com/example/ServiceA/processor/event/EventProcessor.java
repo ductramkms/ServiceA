@@ -2,6 +2,8 @@ package com.example.ServiceA.processor.event;
 
 import com.example.ServiceA.payload.request.EventRequestBody;
 import com.example.ServiceA.payload.response.EventResponseBody;
+import com.example.ServiceA.util.ColorLog;
+
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
@@ -12,7 +14,7 @@ public class EventProcessor implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        log.info("Event Processor: exchange data");
+        log.info(ColorLog.getLog("Event Processor: exchange data"));
         EventRequestBody event = exchange.getIn().getBody(EventRequestBody.class);
 
         EventResponseBody responseEvent = new EventResponseBody(UUID.randomUUID().toString(),

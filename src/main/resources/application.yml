@@ -9,3 +9,13 @@ app:
 spring:
   kafka:
     bootstrap-servers: localhost:29092
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  metrics:
+    export:
+      prometheus:
+        enabled: "true"

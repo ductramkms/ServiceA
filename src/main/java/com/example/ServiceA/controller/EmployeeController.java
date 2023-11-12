@@ -6,6 +6,8 @@ import com.example.ServiceA.payload.response.CamelResponseBody;
 import com.example.ServiceA.util.ColorLog;
 import com.example.ServiceA.util.Helper;
 
+import io.micrometer.core.annotation.Counted;
+import io.micrometer.core.annotation.Timed;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.camel.Produce;
@@ -46,6 +48,7 @@ public class EmployeeController {
         return ResponseEntity.status(HttpStatus.valueOf(body.getStatus())).body(body);
     }
 
+    @Timed(value = "controller.employee.get.all")
     @GetMapping
     public ResponseEntity<CamelResponseBody> all() {
         log.info(ColorLog.getLog("Get all employees"));
@@ -56,6 +59,7 @@ public class EmployeeController {
         return result(body);
     }
 
+    @Timed(value = "controller.employee.get.by.id")
     @GetMapping("/{id}")
     public ResponseEntity<CamelResponseBody> getById(@PathVariable Integer id) {
         log.info(ColorLog.getLog("Get employee by id = " + id));
@@ -66,6 +70,7 @@ public class EmployeeController {
         return result(body);
     }
 
+    @Timed(value = "controller.employee.create")
     @PostMapping
     public ResponseEntity<CamelResponseBody> create(@RequestBody String value) {
         log.info(ColorLog.getLog("Create new employee"));
@@ -80,6 +85,8 @@ public class EmployeeController {
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
+    @Timed(value = "controller.employee.update", description = "Update Employee Request")
+    @Counted(value = "kafka.producer.employee.update", description = "Kafka send message to update employee ")
     @PutMapping
     public ResponseEntity<CamelResponseBody> update(@RequestBody String value) {
         log.info(ColorLog.getLog("Update new employee"));
@@ -90,6 +97,7 @@ public class EmployeeController {
         return ResponseEntity.accepted().body(CamelResponseBody.builder().build());
     }
 
+    @Timed(value = "controller.employee.delete")
     @DeleteMapping("/{id}")
     public ResponseEntity<CamelResponseBody> delete(@PathVariable Integer id) {
         log.info(ColorLog.getLog("Delete employee " + id));

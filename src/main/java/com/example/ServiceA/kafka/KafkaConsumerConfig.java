@@ -17,6 +17,7 @@ import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import com.example.ServiceA.constant.Constant;
 import com.example.ServiceA.util.ColorLog;
 
+import io.micrometer.core.annotation.Counted;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -46,6 +47,7 @@ public class KafkaConsumerConfig {
         return factory;
     }
 
+    @Counted(value = "kafka.calculate.topic2.consuming.time")
     @KafkaListener(topics = Constant.TOPIC_2)
     public void listenTopic2(String message) {
         log.info(ColorLog.getLog("@MESSAGE FROM TOPIC: " + message));

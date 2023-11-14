@@ -28,7 +28,7 @@ class EventControllerTest {
                 + "}";
 
         mockMvc.perform(
-                MockMvcRequestBuilders.post("/event").contentType(MediaType.APPLICATION_JSON)
+                MockMvcRequestBuilders.post("/event/item").contentType(MediaType.APPLICATION_JSON)
                         .content(body))
                 .andExpect(
                         MockMvcResultMatchers.status().isOk()).andExpect(

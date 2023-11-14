@@ -9,6 +9,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class KafkaRequestBody {
 
-    String requestType;
-    String data;
+  String requestType;
+  String data;
 }

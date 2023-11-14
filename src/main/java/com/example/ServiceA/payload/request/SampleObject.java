@@ -9,8 +9,8 @@ import lombok.Data;
 @Builder
 public class SampleObject {
 
-    private int id;
-    private String name;
-    private Integer old;
-    private Double salary;
+  private int id;
+  private String name;
+  private Integer old;
+  private Double salary;
 }

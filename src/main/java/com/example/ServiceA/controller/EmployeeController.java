@@ -5,11 +5,12 @@ import com.example.ServiceA.payload.request.KafkaRequestBody;
 import com.example.ServiceA.payload.response.CamelResponseBody;
 import com.example.ServiceA.util.ColorLog;
 import com.example.ServiceA.util.Helper;
-
 import io.micrometer.core.annotation.Counted;
 import io.micrometer.core.annotation.Timed;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
+import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
-
 import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,85 +27,106 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequestMapping(path = "employees", produces = MediaType.APPLICATION_JSON_VALUE)
-@Slf4j
 public class EmployeeController {
 
-    @Produce
-    private final ProducerTemplate producerTemplate;
+  @Produce
+  private final ProducerTemplate producerTemplate;
 
-    public EmployeeController(ProducerTemplate template) {
-        this.producerTemplate = template;
-    }
+  private final MeterRegistry meterRegistry;
 
-    /**
-     * This function return the common type of result of each APIs.
-     *
-     * @param body common type of content body
-     * @return response entity
-     */
-    private ResponseEntity<CamelResponseBody> result(CamelResponseBody body) {
-        return ResponseEntity.status(HttpStatus.valueOf(body.getStatus())).body(body);
-    }
+  public EmployeeController(ProducerTemplate template, MeterRegistry meterRegistry) {
+    this.producerTemplate = template;
+    this.meterRegistry = meterRegistry;
+  }
 
-    @Timed(value = "controller.employee.get.all")
-    @GetMapping
-    public ResponseEntity<CamelResponseBody> all() {
-        log.info(ColorLog.getLog("Get all employees"));
-        CamelResponseBody body = (CamelResponseBody) producerTemplate.requestBodyAndHeader(
-                "direct:employees", null,
-                Constant.REQ_TYPE, Constant.GET_EMPLOYEES);
+  /**
+   * This function return the common type of result of each API.
+   *
+   * @param body common type of content body
+   * @return response entity
+   */
+  private ResponseEntity<CamelResponseBody> result(CamelResponseBody body) {
+    return ResponseEntity.status(HttpStatus.valueOf(body.getStatus())).body(body);
+  }
 
-        return result(body);
-    }
+  @GetMapping
+  @Timed(value = "controller.employee.get.all")
+  public ResponseEntity<CamelResponseBody> all() {
+    Timer timer = Timer.builder("controller.employee.get.all").register(meterRegistry);
 
-    @Timed(value = "controller.employee.get.by.id")
-    @GetMapping("/{id}")
-    public ResponseEntity<CamelResponseBody> getById(@PathVariable Integer id) {
-        log.info(ColorLog.getLog("Get employee by id = " + id));
-        CamelResponseBody body = (CamelResponseBody) producerTemplate.requestBodyAndHeader(
-                "direct:employees",
-                id, Constant.REQ_TYPE, Constant.GET_EMPLOYEE_BY_ID);
+    CamelResponseBody body = timer.record(
+        () -> (CamelResponseBody) producerTemplate.requestBodyAndHeader(
+            "direct:employees", null,
+            Constant.REQ_TYPE, Constant.GET_EMPLOYEES));
 
-        return result(body);
-    }
+    log.info(ColorLog.getLog("Get all employees with time request = " + timer.max(
+        TimeUnit.MILLISECONDS)));
+    return result(body);
+  }
 
-    @Timed(value = "controller.employee.create")
-    @PostMapping
-    public ResponseEntity<CamelResponseBody> create(@RequestBody String value) {
-        log.info(ColorLog.getLog("Create new employee"));
+  @GetMapping("/{id}")
+  @Timed(value = "controller.employee.get.by.id")
+  public ResponseEntity<CamelResponseBody> getById(@PathVariable Integer id) {
+    Timer timer = Timer.builder("controller.employee.get.by.id").register(meterRegistry);
 
-        CamelResponseBody body = (CamelResponseBody) producerTemplate.requestBodyAndHeader(
-                "direct:employees",
-                value, Constant.REQ_TYPE, Constant.CREATE_EMPLOYEE);
+    CamelResponseBody body = timer.record(
+        () -> (CamelResponseBody) producerTemplate.requestBodyAndHeader(
+            "direct:employees",
+            id, Constant.REQ_TYPE, Constant.GET_EMPLOYEE_BY_ID));
 
-        return result(body);
-    }
+    log.info(ColorLog.getLog("Get employee by id = " + id + " & request time = " + timer.max(
+        TimeUnit.MILLISECONDS)));
+    return result(body);
+  }
 
-    @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
+  @PostMapping
+  @Timed(value = "controller.employee.create")
+  public ResponseEntity<CamelResponseBody> create(@RequestBody String value) {
+    Timer timer = Timer.builder("controller.employee.create").register(meterRegistry);
 
-    @Timed(value = "controller.employee.update", description = "Update Employee Request")
-    @Counted(value = "kafka.producer.employee.update", description = "Kafka send message to update employee ")
-    @PutMapping
-    public ResponseEntity<CamelResponseBody> update(@RequestBody String value) {
-        log.info(ColorLog.getLog("Update new employee"));
+    CamelResponseBody body = timer.record(
+        () -> (CamelResponseBody) producerTemplate.requestBodyAndHeader(
+            "direct:employees",
+            value, Constant.REQ_TYPE, Constant.CREATE_EMPLOYEE));
 
-        KafkaRequestBody message = new KafkaRequestBody(Constant.UPDATE_EMPLOYEE, value);
-        kafkaTemplate.send(Constant.TOPIC_1, Helper.jsonSerialize(message));
+    log.info(ColorLog.getLog("Create new employee & request time = " + timer.max(
+        TimeUnit.MILLISECONDS)));
+    return result(body);
+  }
 
-        return ResponseEntity.accepted().body(CamelResponseBody.builder().build());
-    }
+  @Autowired
+  private KafkaTemplate<String, String> kafkaTemplate;
 
-    @Timed(value = "controller.employee.delete")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<CamelResponseBody> delete(@PathVariable Integer id) {
-        log.info(ColorLog.getLog("Delete employee " + id));
+  @PutMapping
+  @Counted(value = "kafka.producer.employee.update", description = "Kafka send message to update employee ")
+  public ResponseEntity<CamelResponseBody> update(@RequestBody String value) {
+    Timer timer = Timer.builder("controller.employee.update").register(meterRegistry);
 
-        KafkaRequestBody message = new KafkaRequestBody(Constant.DELETE_EMPLOYEE, "" + id);
-        kafkaTemplate.send(Constant.TOPIC_1, Helper.jsonSerialize(message));
+    timer.record(() -> {
+      KafkaRequestBody message = new KafkaRequestBody(Constant.UPDATE_EMPLOYEE, value);
+      kafkaTemplate.send(Constant.TOPIC_1, Helper.jsonSerialize(message));
+    });
 
-        return ResponseEntity.accepted().body(CamelResponseBody.builder().build());
-    }
+    log.info(ColorLog.getLog("Update new employee & request time = " + timer.max(
+        TimeUnit.MILLISECONDS)));
+
+    return ResponseEntity.accepted().body(CamelResponseBody.builder().build());
+  }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<CamelResponseBody> delete(@PathVariable Integer id) {
+    Timer timer = Timer.builder("controller.employee.delete").register(meterRegistry);
+
+    timer.record(() -> {
+      KafkaRequestBody message = new KafkaRequestBody(Constant.DELETE_EMPLOYEE, " " + id);
+      kafkaTemplate.send(Constant.TOPIC_1, Helper.jsonSerialize(message));
+    });
+
+    log.info(ColorLog.getLog("Delete employee " + id + " & request time = " + timer.max(
+        TimeUnit.MILLISECONDS)));
+    return ResponseEntity.accepted().body(CamelResponseBody.builder().build());
+  }
 }

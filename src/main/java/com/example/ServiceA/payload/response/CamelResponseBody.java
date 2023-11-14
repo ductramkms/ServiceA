@@ -16,7 +16,6 @@ public class CamelResponseBody {
 
   public static CamelResponseBody fromJson(String src) {
     Gson gson = new Gson();
-    CamelResponseBody responseBody = gson.fromJson(src, CamelResponseBody.class);
-    return responseBody;
+    return gson.fromJson(src, CamelResponseBody.class);
   }
 }

@@ -36,7 +36,7 @@ spring:
             client-name: service-a-client-authorization-code
         provider:
           spring:
-            issuer-uri: http://localhost:8081
+            issuer-uri: http://${SERVICE_B_HOST:localhost}:8081
 
   kafka:
     bootstrap-servers: localhost:29092

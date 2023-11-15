@@ -119,6 +119,29 @@
       <artifactId>micrometer-registry-prometheus</artifactId>
       <scope>runtime</scope>
     </dependency>
+
+    <!--  Spring Security  -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-oauth2-client</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-webflux</artifactId>
+      <version>${spring-webflux.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>io.projectreactor.netty</groupId>
+      <artifactId>reactor-netty</artifactId>
+      <version>${reactor-netty.version}</version>
+    </dependency>
   </dependencies>
 
   <dependencyManagement>
@@ -166,6 +189,8 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <spring.boot-version>2.7.16</spring.boot-version>
+    <spring-webflux.version>5.3.9</spring-webflux.version>
+    <reactor-netty.version>1.0.9</reactor-netty.version>
   </properties>
 
   <version>0.0.1-SNAPSHOT</version>

@@ -46,6 +46,7 @@ public class CamelRouterBuilder extends RouteBuilder {
         .when(header(Constant.REQ_TYPE).isEqualTo(Constant.CREATE_EMPLOYEE))
         .setBody().simple("${body}")
         .setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_VALUE))
+        .setHeader("", constant(""))
         .to("rest:post:employees")
         .process(new EmployeeProcessor())
         // UPDATE EMPLOYEE

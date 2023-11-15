@@ -1,12 +1,43 @@
 server:
   port: 8080
 
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.security.oauth2: DEBUG
+
 app:
   service_b:
     host: ${SERVICE_B_HOST:localhost}
     port: ${SERVICE_B_PORT:8081}
 
 spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          service-a-client-oidc:
+            provider: spring
+            client-id: service-a-client
+            client-secret: secret
+            authorization-grant-type: authorization_code
+            redirect-uri: "http://127.0.0.1:8080/login/oauth2/code/{registrationId}"
+            scope: openid
+            client-name: service-a-client-oidc
+          service-a-client-authorization-code:
+            provider: spring
+            client-id: service-a-client
+            client-secret: secret
+            authorization-grant-type: authorization_code
+            redirect-uri: "http://127.0.0.1:8080/authorized"
+            scope: employee.read
+            client-name: service-a-client-authorization-code
+        provider:
+          spring:
+            issuer-uri: http://localhost:8081
+
   kafka:
     bootstrap-servers: localhost:29092
 

@@ -16,17 +16,17 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RestController
 public class HomeController {
 
-  @Autowired
-  private WebClient webClient;
+    @Autowired
+    private WebClient webClient;
 
-  @Autowired
-  private MyAuthorizedClient myAuthorizedClient;
+    @Autowired
+    private MyAuthorizedClient myAuthorizedClient;
 
-  @ModelAttribute("authorizedClient")
-  public OAuth2AuthorizedClient getAuthorizedClient(
-      @RegisteredOAuth2AuthorizedClient("service-a-client-authorization-code") OAuth2AuthorizedClient authorizedClient) {
-    return authorizedClient;
-  }
+    @ModelAttribute("authorizedClient")
+    public OAuth2AuthorizedClient getAuthorizedClient(
+            @RegisteredOAuth2AuthorizedClient("service-a-client-authorization-code") OAuth2AuthorizedClient authorizedClient) {
+        return authorizedClient;
+    }
 
   @ResponseBody
   @GetMapping

@@ -5,5 +5,7 @@ RUN --mount=type=cache,target=/root/.m2 mvn -f /app/pom.xml clean package -Dskip
 
 FROM openjdk:11
 COPY --from=builder  /app/target/service_a.jar service_a.jar
+ADD https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent.jar .
+ENV JAVA_TOOL_OPTIONS "-javaagent:./opentelemetry-javaagent.jar"
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","service_a.jar"]

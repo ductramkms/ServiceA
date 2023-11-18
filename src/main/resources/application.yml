@@ -12,7 +12,7 @@ app:
   service_b:
     host: ${SERVICE_B_HOST:localhost}
     port: ${SERVICE_B_PORT:8081}
-    base_url: ${SERVICE_B_HOST:localhost}:${SERVICE_B_PORT:8081}
+    base_url: http://${SERVICE_B_HOST:localhost}:${SERVICE_B_PORT:8081}
 
 spring:
   security:

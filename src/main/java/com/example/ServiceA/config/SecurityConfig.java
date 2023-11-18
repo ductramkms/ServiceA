@@ -12,10 +12,13 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable();
+        http.cors().and().csrf().disable()
+                .authorizeRequests().mvcMatchers("/rest-template-test/**")
+                .permitAll();
 
         http
-                .authorizeRequests(authorizeRequests -> authorizeRequests.anyRequest()
+                .authorizeRequests(authorizeRequests -> authorizeRequests
+                        .anyRequest()
                         .authenticated())
                 .oauth2Login(oauth2Login -> oauth2Login.loginPage(
                         "/oauth2/authorization/service-a-client-oidc"))

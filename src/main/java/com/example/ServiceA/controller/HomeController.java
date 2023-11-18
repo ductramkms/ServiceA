@@ -5,6 +5,7 @@ import static org.springframework.security.oauth2.client.web.reactive.function.c
 import com.example.ServiceA.config.MyAuthorizedClient;
 import com.example.ServiceA.util.ColorLog;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,28 +23,31 @@ public class HomeController {
     @Autowired
     private MyAuthorizedClient myAuthorizedClient;
 
+    @Value("${app.service_b.base_url}")
+    private String baseUrl;
+
     @ModelAttribute("authorizedClient")
     public OAuth2AuthorizedClient getAuthorizedClient(
             @RegisteredOAuth2AuthorizedClient("service-a-client-authorization-code") OAuth2AuthorizedClient authorizedClient) {
         return authorizedClient;
     }
 
-  @ResponseBody
-  @GetMapping
-  public Object home(
-      @ModelAttribute("authorizedClient") OAuth2AuthorizedClient authorizedClient) {
+    @ResponseBody
+    @GetMapping
+    public Object home(
+            @ModelAttribute("authorizedClient") OAuth2AuthorizedClient authorizedClient) {
 
-    myAuthorizedClient.setAuthorizedClient(authorizedClient);
+        myAuthorizedClient.setAuthorizedClient(authorizedClient);
 
-    String accessToken = authorizedClient.getAccessToken().getTokenValue();
-    ColorLog.log("@ACCESS TOKEN: " + accessToken);
+        String accessToken = authorizedClient.getAccessToken().getTokenValue();
+        ColorLog.log("@ACCESS TOKEN: " + accessToken);
 
-    return this.webClient
-        .get()
-        .uri("http://127.0.0.1:8081")
-        .attributes(oauth2AuthorizedClient(authorizedClient))
-        .retrieve()
-        .bodyToMono(Object.class)
-        .block();
-  }
+        return this.webClient
+                .get()
+                .uri(baseUrl)
+                .attributes(oauth2AuthorizedClient(authorizedClient))
+                .retrieve()
+                .bodyToMono(Object.class)
+                .block();
+    }
 }

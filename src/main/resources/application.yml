@@ -12,6 +12,7 @@ app:
   service_b:
     host: ${SERVICE_B_HOST:localhost}
     port: ${SERVICE_B_PORT:8081}
+    base_url: ${SERVICE_B_HOST:localhost}:${SERVICE_B_PORT:8081}
 
 spring:
   security:
@@ -36,7 +37,9 @@ spring:
             client-name: service-a-client-authorization-code
         provider:
           spring:
-            issuer-uri: http://192.168.111.33:8081
+            issuer-uri: http://${SERVICE_B_HOST:localhost}:8081
+            authorization-uri: http://localhost:8081/oauth2/authorize
+            # token-uri: http://127.0.0.1:8081/oauth2/token
 
   kafka:
     bootstrap-servers: ${SPRING_KAFKA_HOST:localhost}:${SPRING_KAFKA_PORT:29092}

@@ -33,11 +33,13 @@
       </exclusions>
       <groupId>org.springframework.boot</groupId>
     </dependency>
+
     <!-- Log4J2 -->
     <dependency>
       <artifactId>spring-boot-starter-log4j2</artifactId>
       <groupId>org.springframework.boot</groupId>
     </dependency>
+
     <!-- Camel -->
     <dependency>
       <artifactId>camel-spring-boot-starter</artifactId>
@@ -48,11 +50,13 @@
       <artifactId>camel-http-starter</artifactId>
       <groupId>org.apache.camel.springboot</groupId>
     </dependency>
+
     <!-- Jackson  -->
     <dependency>
       <artifactId>camel-jackson-starter</artifactId>
       <groupId>org.apache.camel.springboot</groupId>
     </dependency>
+
     <!-- Lombok -->
     <dependency>
       <artifactId>lombok</artifactId>
@@ -131,12 +135,14 @@
       <artifactId>spring-boot-starter-oauth2-client</artifactId>
     </dependency>
 
+    <!-- Web Flux -->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-webflux</artifactId>
       <version>${spring-webflux.version}</version>
     </dependency>
 
+    <!-- Reactor Netty -->
     <dependency>
       <groupId>io.projectreactor.netty</groupId>
       <artifactId>reactor-netty</artifactId>

@@ -14,7 +14,7 @@
               <groupId>org.projectlombok</groupId>
             </exclude>
           </excludes>
-          <mainClass>com.example.ServiceA.ServiceAApplication</mainClass>
+          <mainClass>com.example.service_a.ServiceAApplication</mainClass>
         </configuration>
         <groupId>org.springframework.boot</groupId>
       </plugin>

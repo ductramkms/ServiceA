@@ -24,7 +24,7 @@ spring:
             client-id: service-a-client
             client-secret: secret
             authorization-grant-type: authorization_code
-            redirect-uri: "http://127.0.0.1:8080/login/oauth2/code/{registrationId}"
+            redirect-uri: "http://${REDIRECT_HOST:127.0.0.1}:8080/login/oauth2/code/{registrationId}"
             scope: openid
             client-name: service-a-client-oidc
           service-a-client-authorization-code:
@@ -32,13 +32,13 @@ spring:
             client-id: service-a-client
             client-secret: secret
             authorization-grant-type: authorization_code
-            redirect-uri: "http://127.0.0.1:8080/authorized"
+            redirect-uri: "http://${REDIRECT_HOST:127.0.0.1}:8080/authorized"
             scope: employee.read
             client-name: service-a-client-authorization-code
         provider:
           spring:
             issuer-uri: http://${ISSUER_URI:localhost}:8081
-            authorization-uri: http://localhost:8081/oauth2/authorize
+            authorization-uri: http://${ISSUER_URI:localhost}:8081/oauth2/authorize
             # token-uri: http://127.0.0.1:8081/oauth2/token
 
   kafka:

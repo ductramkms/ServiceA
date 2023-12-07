@@ -32,4 +32,9 @@ public class KafkaTopicConfig {
   public NewTopic topic_2() {
     return new NewTopic(Constant.TOPIC_2, 2, (short) 1);
   }
+
+  @Bean
+  public NewTopic topic_3() {
+    return new NewTopic(Constant.TOPIC_3, 3, (short) 2);
+  }
 }

@@ -37,7 +37,7 @@ spring:
             client-name: service-a-client-authorization-code
         provider:
           spring:
-            issuer-uri: http://${SERVICE_B_HOST:localhost}:8081
+            issuer-uri: http://${ISSUER_URI:localhost}:8081
             authorization-uri: http://localhost:8081/oauth2/authorize
             # token-uri: http://127.0.0.1:8081/oauth2/token
 

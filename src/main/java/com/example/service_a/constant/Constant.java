@@ -11,4 +11,6 @@ public class Constant {
   public static final String DELETE_EMPLOYEE = "DELETE_EMPLOYEE";
   public static final String TOPIC_1 = "TOPIC_1";
   public static final String TOPIC_2 = "TOPIC_2";
+  public static final String TOPIC_3 = "TOPIC_3";
+
 }

@@ -19,7 +19,7 @@ public class CamelRouterBuilder extends RouteBuilder {
   private String port;
 
   @Override
-  public void configure() throws Exception {
+  public void configure() {
     restConfiguration()
         .host(host)
         .port(port)

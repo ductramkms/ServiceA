@@ -1,5 +1,5 @@
 name: learn-github-actions
-run-name: ${{ github.event.head_commit }} is learning GitHub Actions
+run-name: ${{ github.actor }} has commited ${{ github.event.head_commit.message }}
 on: [push]
 jobs:
   check-bats-version:

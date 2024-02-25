@@ -1,6 +1,7 @@
 name: learn-github-actions
 run-name: ${{ github.actor }} has commited ${{ github.event.head_commit.message }}
 on: [push]
+
 jobs:
   check-bats-version:
     runs-on: ubuntu-latest
@@ -9,5 +10,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: "14"
+          cache: 'yarn'
       - run: npm install -g bats
       - run: bats -v
+      - run: yarn
